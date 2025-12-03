@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sienna Brooks Card</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #efefef 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Added card-wrapper with perspective for 3D flip effect */
+        .card-wrapper {
+            width: 100%;
+            max-width: 340px;
+            height: 520px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .card-wrapper.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        .card {
+            background: white;
+            border-radius: 28px;
+            padding: 20px;
+            width: 100%;
+            height: 100%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Back card with purple gradient */
+        .card-back .card {
+            background: linear-gradient(135deg, #b8a8e8 0%, #9d8dd4 100%);
+            gap: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .name {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+            letter-spacing: -0.5px;
+        }
+
+        /* Back card title styling */
+        .card-back .name {
+            font-size: 32px;
+            font-weight: 800;
+            color: #2a1a4a;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .status-icon {
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .antenna {
+            font-size: 12px;
+        }
+
+        /* Description text for back card */
+        .description {
+            font-size: 16px;
+            color: #3a2a5a;
+            text-align: center;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .image-container {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 20px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #d8d8d8 0%, #c8c8c8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 8px;
+        }
+
+        /* Back card features list */
+        .features-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .feature-button {
+            background: rgba(255, 255, 255, 0.7);
+            color: #2a1a4a;
+            border: none;
+            border-radius: 24px;
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-button:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-button.active {
+            background: #2a1a4a;
+            color: white;
+        }
+
+        .feature-button.active:hover {
+            background: #3a2a5a;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .username {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .timestamp {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .add-button {
+            background: #2a2a2a;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            transition: background 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .add-button:hover {
+            background: #1a1a1a;
+        }
+
+        .add-button:active {
+            transform: scale(0.98);
+        }
+
+        .plus-icon {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 480px) {
+            .card-wrapper {
+                height: 500px;
+            }
+
+            .card {
+                max-width: 100%;
+                padding: 16px;
+                gap: 14px;
+                border-radius: 24px;
+            }
+
+            .name {
+                font-size: 22px;
+            }
+
+            .card-back .name {
+                font-size: 28px;
+            }
+
+            .image-container {
+                border-radius: 16px;
+                aspect-ratio: 1 / 1.1;
+            }
+
+            .add-button {
+                padding: 9px 14px;
+                font-size: 13px;
+                border-radius: 10px;
+            }
+
+            .user-info {
+                gap: 10px;
+            }
+
+            .avatar {
+                width: 36px;
+                height: 36px;
+            }
+
+            .description {
+                font-size: 14px;
+            }
+
+            .feature-button {
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .card {
+                padding: 14px;
+                gap: 12px;
+            }
+
+            .name {
+                font-size: 20px;
+            }
+
+            .card-back .name {
+                font-size: 24px;
+            }
+
+            .status {
+                font-size: 13px;
+            }
+
+            .username {
+                font-size: 13px;
+            }
+
+            .add-button {
+                padding: 8px 12px;
+                font-size: 12px;
+                gap: 4px;
+            }
+
+            .description {
+                font-size: 13px;
+            }
+
+            .feature-button {
+                padding: 10px 14px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Added card-wrapper and flip functionality -->
+    <div class="card-wrapper" id="cardWrapper">
+        <div class="card-inner">
+            <!-- Front side -->
+            <div class="card-front">
+                <div class="card">
+                    <div class="card-header">
+                        <h1 class="name">Sienna Brooks</h1>
+                        <div class="status">
+                            <span class="status-icon antenna">📡</span>
+                            <span>Connecting</span>
+                        </div>
+                    </div>
+
+                    <div class="image-container">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop" alt="Sienna Brooks">
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="user-info">
+                            <div class="avatar">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop" alt="Sienna Brooks avatar">
+                            </div>
+                            <div class="user-details">
+                                <span class="username">@sienna32</span>
+                                <span class="timestamp">12m ago</span>
+                            </div>
+                        </div>
+                        <button class="add-button" id="flipButton">
+                            <span class="plus-icon">+</span>
+                            Add member
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Back side with features -->
+            <div class="card-back">
+                <div class="card">
+                    <div class="card-header">
+                        <h1 class="name">AUTOMATE<br>EVERYTHING</h1>
+                        <p class="description">Take the 'time consuming' tasks off your plate.</p>
+                    </div>
+
+                    <div class="features-list">
+                        <button class="feature-button">Regular Reporting</button>
+                        <button class="feature-button active">Multi-Platform Posting</button>
+                        <button class="feature-button">Live ROI Data</button>
+                    </div>
+
+                    <div class="card-footer" style="padding-top: 16px;">
+                        <button class="add-button" id="flipBackButton" style="margin: 0 auto;">
+                            <span class="plus-icon">←</span>
+                            Back
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const cardWrapper = document.getElementById('cardWrapper');
+        const flipButton = document.getElementById('flipButton');
+        const flipBackButton = document.getElementById('flipBackButton');
+        const featureButtons = document.querySelectorAll('.feature-button');
+
+        flipButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            cardWrapper.classList.add('flipped');
+        });
+
+        flipBackButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            cardWrapper.classList.remove('flipped');
+        });
+
+        // Feature button interactivity
+        featureButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                featureButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
